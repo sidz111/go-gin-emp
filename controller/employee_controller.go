@@ -75,6 +75,12 @@ func (c *EmployeeController) GetAllEmployees(ctx *gin.Context) {
 
 func (c *EmployeeController) UpdateEmployee(ctx *gin.Context) {
 	var emp model.Employee
+	if emp.ID <= 0 {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"err": "id should be positive",
+		})
+		return
+	}
 	if err := ctx.ShouldBindJSON(&emp); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"err": err.Error(),
@@ -97,6 +103,12 @@ func (c *EmployeeController) UpdateEmployee(ctx *gin.Context) {
 func (c *EmployeeController) DeleteEmployee(ctx *gin.Context) {
 	id := ctx.Param("id")
 	newId, err := strconv.Atoi(id)
+	if newId <= 0 {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"err": "id should be positive",
+		})
+		return
+	}
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"err": err.Error(),
