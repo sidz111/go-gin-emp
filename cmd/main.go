@@ -9,23 +9,23 @@ import (
 )
 
 func main() {
-	db := db.ConnectDb()
+	database := db.ConnectDb()
 
-	defer db.Close()
+	defer database.Close()
 
 	router := gin.Default()
 
-	repo := repository.NewEmployeeRepository(db)
+	repo := repository.NewEmployeeRepository(database)
 	serv := service.NewEmployeeService(repo)
 	controller := controller.NewEmployeeController(serv)
 
-	r := router.Group("/employees")
+	api := router.Group("/employees")
 	{
-		r.POST("/", controller.CreateEmployee)
-		r.GET("/:id", controller.GetEmployeeById)
-		r.GET("/", controller.GetAllEmployees)
-		r.PUT("/", controller.UpdateEmployee)
-		r.DELETE("/:id", controller.DeleteEmployee)
+		api.POST("/", controller.CreateEmployee)
+		api.GET("/:id", controller.GetEmployeeById)
+		api.GET("/", controller.GetAllEmployees)
+		api.PUT("/", controller.UpdateEmployee)
+		api.DELETE("/:id", controller.DeleteEmployee)
 	}
 	router.Run(":8080")
 
